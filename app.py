@@ -2,7 +2,7 @@ import streamlit as st
 import time
 import pandas as pd
 #import joblib
-import matplotlib.pyplot as plt
+import plotly.express as px
 # from sklearn.feature_extraction.text import CountVectorizer
 # from nltk.corpus import stopwords
 # from nltk.stem import WordNetLemmatizer
@@ -89,16 +89,12 @@ elif option == "A csv file":
         
         #create a chart on the setiment analysis
         dict_ = dict(df["sentiment_analysis"].value_counts())
-        explode = tuple(0.1 if i == 1 else 0 for i in range(len(dict_.values())))
-        fig1, ax1 = plt.subplots()
-        ax1.pie(dict_.values(), explode=explode, labels=dict_.keys(), autopct='%1.1f%%',
-                shadow=True, startangle=90)
-        ax1.axis('equal')        
-        st.pyplot(fig1)
+        # Create a pie chart using Plotly Express
+        fig = px.pie(values=dict_.values(), names=dict_.keys(), title='Sentiment Analysis Distribution')
+        st.plotly_chart(fig)
         # Save the plot to a file (e.g., scatter.png)
         sentiment_chart = "sentiment_chart.png"
-        plt.savefig(sentiment_chart)
-        
+        fig.write_image(sentiment_chart)
         st.write("Prediction time taken: ", round(end-start, 2), "seconds.")
 
         #download button for the analyzed csv file
